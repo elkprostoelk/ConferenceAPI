@@ -30,10 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\ConferenceAPI.Core\ConferenceAPI.Core.csproj" />
     <ProjectReference Include="..\ConferenceAPI.DataAccess\ConferenceAPI.DataAccess.csproj" />
   </ItemGroup>
 
