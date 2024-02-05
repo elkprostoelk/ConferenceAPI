@@ -1,4 +1,5 @@
-﻿using ConferenceAPI.Core.Services;
+﻿using ConferenceAPI.Core.Interfaces;
+using ConferenceAPI.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConferenceAPI.Web.Controllers
@@ -7,15 +8,23 @@ namespace ConferenceAPI.Web.Controllers
     [Route("[controller]")]
     public class ZoomApiController : ControllerBase
     {
-        public readonly ZoomApiService _zoomApiService = new ZoomApiService();
+        public readonly IZoomApiService _zoomApiService;
 
-        [HttpGet("create")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateMeeting([FromQuery]string accessToken)
+        public ZoomApiController(
+            IZoomApiService zoomApiService)
         {
-            string result = await _zoomApiService.CreateZoomMeeting(accessToken);
-            return (result == null) ? BadRequest() : Ok(result);
+            _zoomApiService = zoomApiService;
+        }
+
+        [HttpPost("create")]
+        [ProducesResponseType(typeof(ZoomMeeting), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateMeeting()
+        {
+            var meeting = await _zoomApiService.CreateZoomMeeting();
+            return meeting is not null
+                ? CreatedAtAction(nameof(CreateMeeting), meeting)
+                : BadRequest();
         }
     }
 }

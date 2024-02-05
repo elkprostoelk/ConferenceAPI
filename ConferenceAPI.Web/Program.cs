@@ -21,7 +21,7 @@ try
 
     builder.Host.UseSerilog(Log.Logger);
     builder.Services.ConfigureServices(configuration);
-    builder.Services.AddZoomApiClient(configuration);
+    builder.Services.AddHttpClients(configuration);
 
     var app = builder.Build();
 
