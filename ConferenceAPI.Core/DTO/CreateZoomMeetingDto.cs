@@ -4,7 +4,7 @@ namespace ConferenceAPI.Core.DTO
 {
     public class CreateZoomMeetingDto
     {
-        public string Topic { get; set; }
+        public required string Topic { get; set; }
 
         public int Type { get; set; }
 

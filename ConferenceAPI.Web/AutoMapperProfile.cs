@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ConferenceAPI.Core.DTO;
+using ConferenceAPI.Web.Models;
 
 namespace ConferenceAPI.Web
 {
@@ -6,6 +8,7 @@ namespace ConferenceAPI.Web
     {
         public AutoMapperProfile()
         {
+            CreateMap<CreateZoomMeetingModel, CreateZoomMeetingDto>();
         }
     }
 }

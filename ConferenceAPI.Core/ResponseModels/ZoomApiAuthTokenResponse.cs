@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ConferenceAPI.Core.Models
+namespace ConferenceAPI.Core.ResponseModels
 {
     public class ZoomApiAuthTokenResponse
     {

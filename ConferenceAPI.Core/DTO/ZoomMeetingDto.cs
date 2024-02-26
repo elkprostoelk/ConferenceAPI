@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ConferenceAPI.Core.Models
+namespace ConferenceAPI.Core.DTO
 {
-    public class ZoomMeeting
+    public class ZoomMeetingDto
     {
-        public long Id {  get; set; }
+        public long Id { get; set; }
 
         [JsonPropertyName("join_url")]
         public string JoinUrl { get; set; }

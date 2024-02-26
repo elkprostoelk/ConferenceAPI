@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using ConferenceAPI.Core.DTO;
 using ConferenceAPI.Core.Interfaces;
-using ConferenceAPI.Core.Models;
+using ConferenceAPI.Core.ResponseModels;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +32,7 @@ namespace ConferenceAPI.Core.Services
             _zoomAuthClient = httpClientFactory.CreateClient("ZoomAuth");
         }
 
-        public async Task<ZoomMeeting?> CreateZoomMeeting()
+        public async Task<ZoomMeetingDto?> CreateZoomMeeting(string email, CreateZoomMeetingDto createZoomMeetingDto)
         {
             var tokenResponse = await GetZoomApiAccessTokenAsync();
             if (tokenResponse is null)
@@ -42,23 +42,19 @@ namespace ConferenceAPI.Core.Services
 
             _zoomApiClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
 
-            var requestBody = new CreateZoomMeetingDto
-            {
-                Topic = "My Zoom Meeting",
-                Type = 2,
-                StartTime = DateTime.Now,
-                Duration = 90
-            };
-
-            var response = await _zoomApiClient.PostAsJsonAsync("users/me/meetings", requestBody);
-
+            var response = await _zoomApiClient.PostAsJsonAsync($"users/{email}/meetings", createZoomMeetingDto);
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<ZoomMeeting>();
+                var result = await response.Content.ReadFromJsonAsync<ZoomMeetingDto>();
                 return result;
             }
             else
             {
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    _logger.LogWarning("A Zoom user {UserEmail} has not been found!", email);
+                }
+
                 return null;
             }
         }

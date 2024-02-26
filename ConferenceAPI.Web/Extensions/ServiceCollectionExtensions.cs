@@ -1,6 +1,7 @@
 ﻿using ConferenceAPI.Core.Interfaces;
 using ConferenceAPI.Core.Services;
 using ConferenceAPI.DataAccess;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceAPI.Web.Extensions
@@ -17,6 +18,7 @@ namespace ConferenceAPI.Web.Extensions
             services.AddDbContext<ConferenceApiDbContext>(opts => opts.UseNpgsql(configuration.GetConnectionString("ConferenceAPI")));
 
             services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
+            services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IZoomApiService, ZoomApiService>();
         }
 
