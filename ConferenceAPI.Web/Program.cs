@@ -35,9 +35,6 @@ try
         .AllowAnyHeader()
         .AllowAnyMethod());
 
-    app.UseAuthentication();
-    app.UseAuthorization();
-
     app.MapControllers();
 
     await app.RunAsync();
