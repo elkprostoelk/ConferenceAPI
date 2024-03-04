@@ -1,6 +1,4 @@
 using ConferenceAPI.Web.Extensions;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.Features;
 using Serilog;
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -15,6 +13,7 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.WithEnvironmentName()
     .CreateLogger();
 
+Log.Information("Starting up...");
 try
 {
     var builder = WebApplication.CreateBuilder(args);
