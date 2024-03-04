@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferenceAPI.Web", "ConferenceAPI.Web\ConferenceAPI.Web.csproj", "{ADBBAF1C-63C1-448C-85C3-E00CC1E8A273}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConferenceAPI.Web", "ConferenceAPI.Web\ConferenceAPI.Web.csproj", "{ADBBAF1C-63C1-448C-85C3-E00CC1E8A273}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferenceAPI.DataAccess", "ConferenceAPI.DataAccess\ConferenceAPI.DataAccess.csproj", "{36C81FA1-F2CC-4670-A9A2-3A1FA92A0CA1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferenceAPI.Core", "ConferenceAPI.Core\ConferenceAPI.Core.csproj", "{5BF2AB3A-11E8-47DA-ADD1-901572A45443}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConferenceAPI.Core", "ConferenceAPI.Core\ConferenceAPI.Core.csproj", "{5BF2AB3A-11E8-47DA-ADD1-901572A45443}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{ADBBAF1C-63C1-448C-85C3-E00CC1E8A273}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADBBAF1C-63C1-448C-85C3-E00CC1E8A273}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADBBAF1C-63C1-448C-85C3-E00CC1E8A273}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36C81FA1-F2CC-4670-A9A2-3A1FA92A0CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36C81FA1-F2CC-4670-A9A2-3A1FA92A0CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36C81FA1-F2CC-4670-A9A2-3A1FA92A0CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36C81FA1-F2CC-4670-A9A2-3A1FA92A0CA1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BF2AB3A-11E8-47DA-ADD1-901572A45443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BF2AB3A-11E8-47DA-ADD1-901572A45443}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BF2AB3A-11E8-47DA-ADD1-901572A45443}.Release|Any CPU.ActiveCfg = Release|Any CPU

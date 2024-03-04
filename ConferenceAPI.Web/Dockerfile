@@ -10,7 +10,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ConferenceAPI.Web/ConferenceAPI.Web.csproj", "ConferenceAPI.Web/"]
-COPY ["ConferenceAPI.DataAccess/ConferenceAPI.DataAccess.csproj", "ConferenceAPI.DataAccess/"]
 COPY ["ConferenceAPI.Core/ConferenceAPI.Core.csproj", "ConferenceAPI.Core/"]
 RUN dotnet restore "./ConferenceAPI.Web/./ConferenceAPI.Web.csproj"
 COPY . .

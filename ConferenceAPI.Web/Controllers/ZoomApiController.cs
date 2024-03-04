@@ -33,5 +33,17 @@ namespace ConferenceAPI.Web.Controllers
                 ? CreatedAtAction(nameof(CreateMeeting), meeting)
                 : BadRequest();
         }
+
+        [HttpGet("meeting/{id:long}")]
+        [ProducesResponseType(typeof(ZoomMeetingDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetZoomMeetingById(long id)
+        {
+            var meeting = await _zoomApiService.GetZoomMeetingByIdAsync(id);
+
+            return meeting is not null
+                ? Ok(meeting)
+                : BadRequest();
+        }
     }
 }

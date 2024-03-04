@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using ConferenceAPI.Core.DTO;
 using ConferenceAPI.Core.Interfaces;
 using ConferenceAPI.Core.ResponseModels;
@@ -50,9 +51,40 @@ namespace ConferenceAPI.Core.Services
             }
             else
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     _logger.LogWarning("A Zoom user {UserEmail} has not been found!", email);
+                }
+                else if (response.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    _logger.LogWarning("A number of 100 requests for a user per day has been exceeded!");
+                }
+
+                return null;
+            }
+        }
+
+        public async Task<ZoomMeetingDto?> GetZoomMeetingByIdAsync(long id)
+        {
+            var tokenResponse = await GetZoomApiAccessTokenAsync();
+            if (tokenResponse is null)
+            {
+                return null;
+            }
+
+            _zoomApiClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+            var response = await _zoomApiClient.GetAsync($"meetings/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ZoomMeetingDto>();
+                return result;
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    _logger.LogWarning("A request Get Meeting {MeetingId} has returned 404. Error: {Error}", id, await response.Content.ReadAsStringAsync());
                 }
 
                 return null;
