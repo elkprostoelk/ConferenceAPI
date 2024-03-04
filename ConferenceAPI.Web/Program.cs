@@ -5,7 +5,7 @@ using Serilog;
 
 IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json")
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: false, reloadOnChange: true)
     .Build();
 
 Log.Logger = new LoggerConfiguration()
@@ -24,20 +24,17 @@ try
     builder.Services.AddHttpClients(configuration);
 
     var app = builder.Build();
-
-    app.UseExceptionHandler(appBuilder => appBuilder.Run(async context =>
-    {
-        var exceptionHandlerPathFeature = context.Features.GetRequiredFeature<IExceptionHandlerPathFeature>();
-        Exception exception = exceptionHandlerPathFeature.Error;
-        context.Response.StatusCode = 500;
-        Log.Error(exception, "An exception occured while processing the request");
-        await context.Response.WriteAsJsonAsync("Internal Server Error");
-    }));
+    app.UseExceptionHandler();
 
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    var origins = configuration["CorsAllowedOrigins"]!.Split(';', StringSplitOptions.RemoveEmptyEntries);
     app.UseHttpsRedirection();
+    app.UseCors(policyBuilder => policyBuilder
+        .WithOrigins(origins)
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 
     app.UseAuthentication();
     app.UseAuthorization();

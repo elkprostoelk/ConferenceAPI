@@ -12,7 +12,10 @@ namespace ConferenceAPI.Web.Extensions
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddMemoryCache();
+            services.AddCors();
 
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
             services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IZoomApiService, ZoomApiService>();
