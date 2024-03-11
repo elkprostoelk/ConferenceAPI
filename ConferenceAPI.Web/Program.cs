@@ -31,6 +31,7 @@ try
     var origins = configuration["CorsAllowedOrigins"]!.Split(';', StringSplitOptions.RemoveEmptyEntries);
     app.UseHttpsRedirection();
     app.UseCors(policyBuilder => policyBuilder
+        .SetIsOriginAllowedToAllowWildcardSubdomains()
         .WithOrigins(origins)
         .AllowAnyHeader()
         .AllowAnyMethod());
