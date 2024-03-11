@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using ConferenceAPI.Core.DTO;
 using ConferenceAPI.Core.Interfaces;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
 namespace ConferenceAPI.Core.Services
@@ -100,6 +101,40 @@ namespace ConferenceAPI.Core.Services
             {
                 _logger.LogWarning(
                     "A request Get Meeting {Id} has returned {StatusCode}. Response body: {ResponseBody}",
+                    id,
+                    response.StatusCode,
+                    await response.Content.ReadAsStringAsync());
+
+                return null;
+            }
+        }
+
+        public async Task<ZoomMeetingStatisticsDto?> GetZoomMeetingStatisticsAsync(long id)
+        {
+            var tokenResponse = await _zoomAuthService.GetZoomApiAccessTokenAsync();
+            if (tokenResponse is null)
+            {
+                return null;
+            }
+
+            _zoomApiClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+            var requestUri = QueryHelpers.AddQueryString(
+                $"metrics/meetings/{id}/participants",
+                new Dictionary<string, string?>
+                {
+                    { "type", "past" },
+                    { "page_size", "200" }
+                });
+            var response = await _zoomApiClient.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<ZoomMeetingStatisticsDto>();
+            }
+            else
+            {
+                _logger.LogWarning(
+                    "A request Get Meeting Statistics {Id} has returned {StatusCode}. Response body: {ResponseBody}",
                     id,
                     response.StatusCode,
                     await response.Content.ReadAsStringAsync());

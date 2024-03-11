@@ -75,9 +75,28 @@ namespace ConferenceAPI.Web.Controllers
                 return Unauthorized();
             }
 
-            bool deleted = await _zoomApiService.DeleteZoomMeetingAsync(id);
+            var deleted = await _zoomApiService.DeleteZoomMeetingAsync(id);
 
             return deleted ? NoContent() : BadRequest();
+        }
+
+        [HttpGet("meeting/{id:long}/statistics")]
+        [ProducesResponseType(typeof(ZoomMeetingStatisticsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetMeetingStatistics(long id)
+        {
+            var token = await _zoomAuthService.GetZoomApiAccessTokenAsync();
+            if (token is null)
+            {
+                return Unauthorized();
+            }
+
+            var meetingStatistics = await _zoomApiService.GetZoomMeetingStatisticsAsync(id);
+
+            return meetingStatistics is not null
+                ? Ok(meetingStatistics)
+                : BadRequest();
         }
     }
 }

@@ -8,5 +8,6 @@ namespace ConferenceAPI.Core.Interfaces
         Task<ZoomMeetingDto?> CreateZoomMeeting(string email, CreateZoomMeetingDto createZoomMeetingDto);
         Task<bool> DeleteZoomMeetingAsync(long id);
         Task<ZoomMeetingDto?> GetZoomMeetingByIdAsync(long id);
+        Task<ZoomMeetingStatisticsDto?> GetZoomMeetingStatisticsAsync(long id);
     }
 }
