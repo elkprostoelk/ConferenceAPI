@@ -18,6 +18,7 @@ namespace ConferenceAPI.Web.Extensions
             services.AddProblemDetails();
             services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IZoomAuthService, ZoomAuthService>();
             services.AddScoped<IZoomApiService, ZoomApiService>();
         }
 

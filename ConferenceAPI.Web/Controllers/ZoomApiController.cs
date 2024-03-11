@@ -10,13 +10,16 @@ namespace ConferenceAPI.Web.Controllers
     [Route("[controller]")]
     public class ZoomApiController : ControllerBase
     {
+        private readonly IZoomAuthService _zoomAuthService;
         public readonly IZoomApiService _zoomApiService;
         private readonly IMapper _mapper;
 
         public ZoomApiController(
+            IZoomAuthService zoomAuthService,
             IZoomApiService zoomApiService,
             IMapper mapper)
         {
+            _zoomAuthService = zoomAuthService;
             _zoomApiService = zoomApiService;
             _mapper = mapper;
         }
@@ -24,8 +27,15 @@ namespace ConferenceAPI.Web.Controllers
         [HttpPost("create")]
         [ProducesResponseType(typeof(ZoomMeetingDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateMeeting(CreateZoomMeetingModel createZoomMeetingModel)
         {
+            var token = await _zoomAuthService.GetZoomApiAccessTokenAsync();
+            if (token is null)
+            {
+                return Unauthorized();
+            }
+
             var createZoomMeetingDto = _mapper.Map<CreateZoomMeetingDto>(createZoomMeetingModel);
 
             var meeting = await _zoomApiService.CreateZoomMeeting(createZoomMeetingModel.Email, createZoomMeetingDto);
@@ -37,8 +47,15 @@ namespace ConferenceAPI.Web.Controllers
         [HttpGet("meeting/{id:long}")]
         [ProducesResponseType(typeof(ZoomMeetingDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetZoomMeetingById(long id)
         {
+            var token = await _zoomAuthService.GetZoomApiAccessTokenAsync();
+            if (token is null)
+            {
+                return Unauthorized();
+            }
+
             var meeting = await _zoomApiService.GetZoomMeetingByIdAsync(id);
 
             return meeting is not null
