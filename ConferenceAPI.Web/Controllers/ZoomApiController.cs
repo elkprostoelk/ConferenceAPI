@@ -62,5 +62,22 @@ namespace ConferenceAPI.Web.Controllers
                 ? Ok(meeting)
                 : BadRequest();
         }
+
+        [HttpDelete("meeting/{id:long}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> DeleteZoomMeeting(long id)
+        {
+            var token = await _zoomAuthService.GetZoomApiAccessTokenAsync();
+            if (token is null)
+            {
+                return Unauthorized();
+            }
+
+            bool deleted = await _zoomApiService.DeleteZoomMeetingAsync(id);
+
+            return deleted ? NoContent() : BadRequest();
+        }
     }
 }

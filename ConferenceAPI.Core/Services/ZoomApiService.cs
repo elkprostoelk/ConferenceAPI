@@ -53,6 +53,33 @@ namespace ConferenceAPI.Core.Services
             }
         }
 
+        public async Task<bool> DeleteZoomMeetingAsync(long id)
+        {
+            var tokenResponse = await _zoomAuthService.GetZoomApiAccessTokenAsync();
+            if (tokenResponse is null)
+            {
+                return false;
+            }
+
+            _zoomApiClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+            var response = await _zoomApiClient.DeleteAsync($"meetings/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                _logger.LogWarning(
+                    "A request Delete Meeting {Id} has returned {StatusCode}. Response body: {ResponseBody}",
+                    id,
+                    response.StatusCode,
+                    await response.Content.ReadAsStringAsync());
+                
+                return false;
+            }
+        }
+
         public async Task<ZoomMeetingDto?> GetZoomMeetingByIdAsync(long id)
         {
             var tokenResponse = await _zoomAuthService.GetZoomApiAccessTokenAsync();
@@ -71,10 +98,11 @@ namespace ConferenceAPI.Core.Services
             }
             else
             {
-                if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    _logger.LogWarning("A request Get Meeting {MeetingId} has returned 404. Error: {Error}", id, await response.Content.ReadAsStringAsync());
-                }
+                _logger.LogWarning(
+                    "A request Get Meeting {Id} has returned {StatusCode}. Response body: {ResponseBody}",
+                    id,
+                    response.StatusCode,
+                    await response.Content.ReadAsStringAsync());
 
                 return null;
             }
