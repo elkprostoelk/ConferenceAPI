@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using ConferenceAPI.Core.Enums;
+using System.Text.Json.Serialization;
 
 namespace ConferenceAPI.Core.DTO
 {
@@ -13,6 +14,15 @@ namespace ConferenceAPI.Core.DTO
         public string StartUrl { get; set; }
 
         [JsonPropertyName("start_time")]
-        public DateTime StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
+
+        [JsonPropertyName("host_email")]
+        public string HostEmail { get; set; }
+
+        public MeetingType Type { get; set; }
+
+        public string Password { get; set; }
+
+        public CreateZoomMeetingSettingsDto? Settings { get; set; }
     }
 }

@@ -16,15 +16,33 @@ namespace ConferenceAPI.Web.Validators
                 .EmailAddress().WithMessage("Email address is not valid!")
                 .MaximumLength(100).WithMessage("Email address should not be longer than 100 symbols!");
 
-            RuleFor(m => m.StartTime)
-                .NotEmpty().WithMessage("Starting date and time must be specified!")
-                .GreaterThan(DateTime.Now).WithMessage("Starting date and time must be later than now!");
-
+            When(m => m.StartTime.HasValue, () =>
+            {
+                RuleFor(m => m.StartTime)
+                    .GreaterThan(DateTime.Now)
+                    .WithMessage("Starting date and time must be later than now!");
+            });
+            
             RuleFor(m => m.Duration)
-                .GreaterThan(0).WithMessage("Meeting duration must be a positive number!");
+                .GreaterThan(0)
+                .WithMessage("Meeting duration must be a positive number!");
 
             RuleFor(m => m.Type)
-                .InclusiveBetween(1, 4).WithMessage("Meeting type must be specified as 1, 2, 3 or 4!");
+                .IsInEnum()
+                .WithMessage("Meeting type must be specified as an existing one!");
+
+            When(m => m.Type == Core.Enums.MeetingType.RecurringMeetingNoFixedTime, () =>
+            {
+                RuleFor(m => m.StartTime)
+                    .Null().WithMessage("Recurring meetings with no fixed time cannot have start time!");
+            });
+
+            When(m => m.Settings is not null && m.Settings.WaitingRoom == true && m.Settings.JoinBeforeHost.HasValue, () =>
+            {
+                RuleFor(m => m.Settings!.JoinBeforeHost)
+                    .Equal(false)
+                    .WithMessage("If the Waiting Room feature is enabled, JoinBeforeHost setting must be disabled!");
+            });
         }
     }
 }

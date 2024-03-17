@@ -8,7 +8,9 @@ namespace ConferenceAPI.Web
     {
         public AutoMapperProfile()
         {
-            CreateMap<CreateZoomMeetingModel, CreateZoomMeetingDto>();
+            CreateMap<CreateZoomMeetingSettingsModel, CreateZoomMeetingSettingsDto>();
+            CreateMap<CreateZoomMeetingModel, CreateZoomMeetingDto>()
+                .ForMember(dto => dto.Settings, opts => opts.MapFrom(m => m.Settings));
         }
     }
 }

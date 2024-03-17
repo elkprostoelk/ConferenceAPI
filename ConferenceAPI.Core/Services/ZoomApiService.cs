@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using ConferenceAPI.Core.DTO;
 using ConferenceAPI.Core.Interfaces;
 using Microsoft.AspNetCore.WebUtilities;
@@ -9,6 +10,9 @@ namespace ConferenceAPI.Core.Services
 {
     public class ZoomApiService : IZoomApiService
     {
+        private const string AllowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const int MaxPasswordLength = 10;
+
         private readonly IZoomAuthService _zoomAuthService;
         private readonly ILogger<ZoomApiService> _logger;
         private readonly HttpClient _zoomApiClient;
@@ -32,6 +36,7 @@ namespace ConferenceAPI.Core.Services
             }
 
             _zoomApiClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+            createZoomMeetingDto.Password = GenerateRandomPassword();
 
             var response = await _zoomApiClient.PostAsJsonAsync($"users/{email}/meetings", createZoomMeetingDto);
             if (response.IsSuccessStatusCode)
@@ -124,7 +129,7 @@ namespace ConferenceAPI.Core.Services
                 new Dictionary<string, string?>
                 {
                     { "type", "past" },
-                    { "page_size", "200" }
+                    { "page_size", "300" }
                 });
             var response = await _zoomApiClient.GetAsync(requestUri);
             if (response.IsSuccessStatusCode)
@@ -141,6 +146,20 @@ namespace ConferenceAPI.Core.Services
 
                 return null;
             }
+        }
+
+        private static string GenerateRandomPassword()
+        {
+            var random = new Random();
+            var randomPasswordBuilder = new StringBuilder();
+            var allowedCharsShuffled = AllowedChars.ToArray();
+            random.Shuffle(allowedCharsShuffled);
+            for (var i = 0; i < MaxPasswordLength; i++)
+            {
+                randomPasswordBuilder.Append(allowedCharsShuffled[random.Next(0, allowedCharsShuffled.Length)]);
+            }
+
+            return randomPasswordBuilder.ToString();
         }
     }
 }

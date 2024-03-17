@@ -1,5 +1,4 @@
 ﻿using ConferenceAPI.Core.DTO;
-using ConferenceAPI.Core.ResponseModels;
 
 namespace ConferenceAPI.Core.Interfaces
 {
