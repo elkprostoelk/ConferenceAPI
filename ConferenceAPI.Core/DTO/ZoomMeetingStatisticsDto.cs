@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Text.Json.Serialization;
 
 namespace ConferenceAPI.Core.DTO
 {
@@ -28,5 +22,7 @@ namespace ConferenceAPI.Core.DTO
 
         [JsonPropertyName("leave_reason")]
         public string LeaveReason { get; set; }
+
+        public string Role { get; set; }
     }
 }
