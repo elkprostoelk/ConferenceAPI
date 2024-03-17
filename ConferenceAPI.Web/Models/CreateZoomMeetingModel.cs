@@ -26,5 +26,8 @@ namespace ConferenceAPI.Web.Models
 
         [JsonPropertyName("join_before_host")]
         public bool? JoinBeforeHost { get; set; }
+
+        [JsonPropertyName("mute_upon_entry")]
+        public bool MuteUponEntry { get; set; } = true;
     }
 }
