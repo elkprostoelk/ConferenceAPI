@@ -36,7 +36,7 @@
         "ASPNETCORE_HTTP_PORTS": "8080",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "publishAllPorts": true,
+      "publishAllPorts": false,
       "useSSL": true
     }
   },
@@ -45,8 +45,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:23924",
-      "sslPort": 44303
+      "applicationUrl": "http://localhost:8080",
+      "sslPort": 8081
     }
   }
 }
